@@ -6,8 +6,6 @@ import { auth } from '../firebase';
 import Logo from '../assets/my_commute.jpg';
 import { StatusBar } from 'expo-status-bar';
 
-
-
 export default function RegisterPage() {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');

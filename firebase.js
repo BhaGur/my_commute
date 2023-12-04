@@ -1,17 +1,21 @@
 import {initializeApp} from "firebase/app";
 import {getAuth} from 'firebase/auth';
+import { getDatabase } from "firebase/database";
+import {API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBYuFk5qsyyRvu-sOHXfAcLkfX62x7wAmw",
-  authDomain: "mycommute-51103.firebaseapp.com",
-  projectId: "mycommute-51103",
-  storageBucket: "mycommute-51103.appspot.com",
-  messagingSenderId: "315209040690",
-  appId: "1:315209040690:web:0fa90c65d8d1af19dc0d2b"
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
 
-export const auth = getAuth(app);
+export {app, db, auth};
