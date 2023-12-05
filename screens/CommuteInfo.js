@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Constants from "expo-constants";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import MapViewDirections from "react-native-maps-directions";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { db, auth } from '../firebase';
+import { push, ref } from 'firebase/database';
 
 const googleKey = `${process.env.REACT_APP_GOOGLE_API_KEY}`
 // Constants for map settings
@@ -62,13 +64,14 @@ const CommuteInfo = () => {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  const [chosenDate, setChosenDate] = useState(new Date());
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
+  const onChange = async (event, selectedDate) => {
+    const currentDate = selectedDate || date;
     setShow(false);
     setDate(currentDate);
-  };
-
+    setChosenDate(currentDate);
+  }
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
@@ -129,6 +132,27 @@ const CommuteInfo = () => {
       moveTo(position);
     }
   };
+
+  const saveData = async () => {
+    try {
+      const commuteDataRef = ref(db, 'commuteData/' + auth.currentUser.uid );
+
+      // Add a new commute record under 'commuteData' with a unique key
+      await push(commuteDataRef, {
+        chosenDate: chosenDate.toISOString().split('T')[0],
+        origin,
+        destination,
+        travelMode,
+        distance,
+      });
+
+      alert('New commute added successfully');
+    } catch (error) {
+      console.error('Error saving data to Firebase:', error);
+      // Add code to handle errors, such as showing a user-friendly message
+    }
+  };
+  
   // Render the main view
   return (
     <View style={styles.container}>
@@ -197,6 +221,9 @@ const CommuteInfo = () => {
             <Text style={{marginTop: 8, marginBottom: 8, fontSize: 15}}>Distance: {distance.toFixed(2)} km</Text>
           </View>
         ) : null}
+        <TouchableOpacity style={styles.button} onPress={saveData}>
+         <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
