@@ -35,14 +35,16 @@ return (
                 <Text style={{color: 'red'}}>Logout</Text>
             </TouchableOpacity>
         </View>
+
         <View style={styles.midBox}>
-            <Text>Today's Date</Text>
+            <Text style={{fontSize: 18, fontWeight:'bold'}}>Today's Date</Text>
             <Text>{currentDate}</Text>
         </View>
-        <View style={styles.container}>
-  
-            
+        <TouchableOpacity style={styles.button}>
             <Weather />
+        </TouchableOpacity>
+        
+        <View style={styles.container}>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity 
                     style={{
@@ -93,7 +95,6 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,  
       alignItems: 'center',
-      justifyContent: 'center',
     },
     header:{
       flexDirection: 'row',
@@ -113,7 +114,6 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     button: {
-        margin: 10,
         width: '100%',
         padding: 15,
         borderRadius: 10,
