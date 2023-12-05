@@ -54,8 +54,8 @@ const InputAutocomplete = ({ label, placeholder, onPlaceSelected }) => {
 // Define the main App component
 const CommuteInfo = () => {
   // State variables
-  const [origin, setOrigin] = useState(null);
-  const [destination, setDestination] = useState(null);
+  const [origin, setOrigin] = useState({ address: null, location: null});
+  const [destination, setDestination] = useState({ address: null, location: null});
   const [showDirections, setShowDirections] = useState(false);
   const [distance, setDistance] = useState(0);
   const [travelMode, setTravelMode] = useState("WALKING"); // Default to walking
@@ -116,7 +116,7 @@ const CommuteInfo = () => {
   const traceRoute = () => {
     if (origin && destination) {
       setShowDirections(true);
-      mapRef.current?.fitToCoordinates([origin, destination], { edgePadding });
+      mapRef.current?.fitToCoordinates([origin.location, destination.location], { edgePadding });
     }
   };
 
@@ -128,20 +128,21 @@ const CommuteInfo = () => {
         latitude: details.geometry.location.lat,
         longitude: details.geometry.location.lng,
       };
-      set(position);
+      const address = details.formatted_address;
+      set({ address, location: position });
       moveTo(position);
     }
   };
 
   const saveData = async () => {
     try {
-      const commuteDataRef = ref(db, 'commuteData/' + auth.currentUser.uid );
+      const commuteDataRef = ref(db, 'commuteData/' + auth.currentUser.uid);
 
       // Add a new commute record under 'commuteData' with a unique key
       await push(commuteDataRef, {
         chosenDate: chosenDate.toISOString().split('T')[0],
-        origin,
-        destination,
+        origin: origin.address,
+        destination: destination.address,
         travelMode,
         distance,
       });
@@ -162,12 +163,12 @@ const CommuteInfo = () => {
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_POSITION}
       >
-        {origin && <Marker coordinate={origin} />}
-        {destination && <Marker coordinate={destination} />}
-        {showDirections && origin && destination && (
+        {origin.location && <Marker coordinate={origin.location} />}
+        {destination.location && <Marker coordinate={destination.location} />}
+        {showDirections && origin.location && destination.location && (
           <MapViewDirections
-            origin={origin}
-            destination={destination}
+            origin={origin.location}
+            destination={destination.location}
             apikey={googleKey}
             strokeColor="#6644ff"
             strokeWidth={4}
@@ -222,7 +223,7 @@ const CommuteInfo = () => {
           </View>
         ) : null}
         <TouchableOpacity style={styles.button} onPress={saveData}>
-         <Text style={styles.buttonText}>Save</Text>
+         <Text style={styles.buttonText}>Save Journey</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -262,6 +263,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#bbb",
     paddingVertical: 12,
     borderRadius: 4,
+    marginBottom: 2
   },
   buttonText: {
     textAlign: "center",
