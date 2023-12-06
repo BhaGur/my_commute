@@ -136,7 +136,7 @@ const CommuteInfo = () => {
 
   const saveData = async () => {
     try {
-      const commuteDataRef = ref(db, 'commuteData/' + auth.currentUser.uid);
+      const commuteDataRef = ref(db, auth.currentUser.uid + '/journey');
 
       // Add a new commute record under 'commuteData' with a unique key
       await push(commuteDataRef, {

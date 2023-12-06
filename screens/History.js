@@ -7,7 +7,7 @@ const FecthData = () => {
     const [journey, setJourney] = useState([]);
 
     useEffect (() => {
-        const starCountRef = ref(db, 'commuteData/' + auth.currentUser.uid );
+        const starCountRef = ref(db, auth.currentUser.uid + '/journey');
         onValue(starCountRef, (snapshot) => {
             const data = snapshot.val();
             const items = [];
@@ -19,38 +19,60 @@ const FecthData = () => {
     },[]);
 
     const extractStreetAndCity = (fullAddress) => {
-        const parts = fullAddress.split(','); // Split the address by comma
-        const streetName = parts[0].trim(); // Extract and trim the street name
-        const cityWithCode = parts[1].trim(); // Extract and trim the city with code
+        const parts = fullAddress.split(','); 
+        const streetName = parts[0].trim(); 
+        const cityWithCode = parts[1].trim(); 
       
-        // Use a regular expression to remove the code (assumes the code is numeric)
         const cityWithoutCode = cityWithCode.replace(/\d+/g, '').trim();
       
         return { streetName, city: cityWithoutCode };
       };
       
+    const renderItem = ({ item }) => {
+        const travelModeColor = getColor(item.travelMode);
+
+        return(
+            <View style={[styles.list, {backgroundColor: travelModeColor}]}>  
+                <Text style={{fontSize: 15}}>Date: {item.chosenDate}</Text>
+                <Text style={{ fontSize: 15 }}>
+                    Start: {extractStreetAndCity(item.origin).streetName}, {extractStreetAndCity(item.origin).city}
+                </Text>
+                <Text style={{ fontSize: 15 }}>
+                    Finish: {extractStreetAndCity(item.destination).streetName}, {extractStreetAndCity(item.destination).city}
+                </Text>               
+                <Text style={{fontSize: 15}}>Distance: {item.distance} KM</Text>
+                <Text style={{ fontSize: 15 }}>
+                    Travel mode: {item.travelMode.charAt(0).toUpperCase() + item.travelMode.slice(1).toLowerCase()}
+                </Text>
+            </View>   
+        );
+    };
+
+    getColor = (item) => {
+        if ( item === 'WALKING') {
+            return 'lightgreen';
+        }
+        if ( item === 'BICYCLING') {
+            return 'deepskyblue';
+        }
+        if ( item === 'TRANSIT') {
+            return 'khaki';
+        }
+        if ( item === 'DRIVING') {
+            return 'red';
+        }
+    }
+
     return(
         <View style={styles.container}>
-            <Text style={styles.header}>Your Journey History</Text>
-            <FlatList
-                data={journey}
-                keyExtractor={item => item.id}
-                renderItem={({item}) =>(
-                    <View style={styles.list}>  
-                        <Text style={{fontSize: 15}}>Date: {item.chosenDate}</Text>
-                        <Text style={{ fontSize: 15 }}>
-                            Start: {extractStreetAndCity(item.origin).streetName}, {extractStreetAndCity(item.origin).city}
-                        </Text>
-                        <Text style={{ fontSize: 15 }}>
-                            Finish: {extractStreetAndCity(item.destination).streetName}, {extractStreetAndCity(item.destination).city}
-                        </Text>               
-                        <Text style={{fontSize: 15}}>Distance: {item.distance} KM</Text>
-                        <Text style={{ fontSize: 15 }}>
-                            Travel mode: {item.travelMode.charAt(0).toUpperCase() + item.travelMode.slice(1).toLowerCase()}
-                        </Text>
-                    </View>
-                )} 
-            />
+            <Text style={styles.header}>Journey History</Text>
+            {journey && (
+                <FlatList
+                    data={journey}
+                    keyExtractor={item => item.id}
+                    renderItem={renderItem} 
+                />
+            )}
         </View>
     )
 }
@@ -62,18 +84,20 @@ const styles = StyleSheet.create({
     header: {
       fontSize: 30,
       textAlign: 'center',
-      marginTop: 20,
+      margin: 15,
       fontWeight: 'bold'  
     },
-    text: {
-        fontSize: 20,
-        textAlign: 'center',
-        marginTop: 10
-    },
     list: {
-        margin: 25,
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start'   
+      backgroundColor: '#f9c2ff',
+      paddingStart: 15,
+      padding: 5,
+      marginVertical: 8,
+      marginHorizontal: 16,
+      borderRadius: 8,
+      shadowColor: '#000',
+      shadowOffset: { width: 3, height: 3 },
+      shadowOpacity: 0.3,
+      shadowRadius: 8
     }
 });
 
