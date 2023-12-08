@@ -1,15 +1,16 @@
 import {initializeApp} from "firebase/app";
 import {getAuth} from 'firebase/auth';
 import { getDatabase } from "firebase/database";
+import {API_KEY, AUTH_DOMAIN, AUTH_DATABASE, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID} from '@env';
 
 const firebaseConfig = {
-  apiKey: `${process.env.API_KEY}`,
-  authDomain: `${process.env.AUTH_DOMAIN}`,
-  projectId: "mycommute-51103",
-  databaseURL: "https://mycommute-51103-default-rtdb.europe-west1.firebasedatabase.app",
-  storageBucket: "mycommute-51103.appspot.com",
-  messagingSenderId: "315209040690",
-  appId: "1:315209040690:web:0fa90c65d8d1af19dc0d2b"
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  databaseURL: AUTH_DATABASE,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID
 };
 
 const app = initializeApp(firebaseConfig);

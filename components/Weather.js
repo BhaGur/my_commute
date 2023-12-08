@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, Image } from 'react-native';
 import axios from 'axios';
 import * as Location from 'expo-location';
+import {WEATHER_API_KEY} from '@env';
 
 const Weather = () => {
   const [weather, setWeather] = useState(null);
@@ -11,7 +12,7 @@ const Weather = () => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
 
-  const apiKey = `${process.env.WEATHER_API_KEY}`; 
+  const apiKey = WEATHER_API_KEY; 
 
   useEffect(() => {
     (async () => {

@@ -16,9 +16,9 @@ import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { db, auth } from '../firebase';
 import { push, ref } from 'firebase/database';
+import { REACT_APP_GOOGLE_API_KEY} from '@env';
 
-const googleKey = `${process.env.REACT_APP_GOOGLE_API_KEY}`
-// Constants for map settings
+const googleKey = REACT_APP_GOOGLE_API_KEY;
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.02;
