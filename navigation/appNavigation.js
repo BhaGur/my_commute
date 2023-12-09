@@ -8,6 +8,7 @@ import WeekSummary from '../screens/WeekSummary';
 import useAuth from '../hooks/useAuth';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
+import ProfilePage from '../screens/ProfilePage';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ export default function AppNavigation() {
     return (
         <NavigationContainer>
           <Stack.Navigator>
+            <Stack.Screen name="Profile" component={ProfilePage} options={{headerShown: false }} />
             <Stack.Screen name="Home" component={HomePage} options={{headerShown: false }} />
             <Stack.Screen name="Commute Information" component={CommuteInfo} options={{headerShown: false }} />
             <Stack.Screen name="History" component={History} options={{headerShown: false }} />

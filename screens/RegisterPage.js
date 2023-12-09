@@ -11,7 +11,6 @@ export default function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [userName, setUserName] = useState('');
 
     const handleSubmit = async ()=>{
         if (password !== confirmPassword) {
@@ -37,13 +36,7 @@ return (
 
       <StatusBar style="auto" />
       <View style ={styles.inputContainer}>
-          <Text>Username</Text>
-          <TextInput
-              style={styles.input}
-              value={userName}
-              onChangeText={value=> setUserName(value)}
-              placeholder='Username'
-          />
+
           <Text>Email Address</Text>
           <TextInput
               style={styles.input}
