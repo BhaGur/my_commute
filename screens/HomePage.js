@@ -53,6 +53,18 @@ return (
                         padding: 15,
                         borderRadius: 10,
                         alignItems: 'center',
+                        backgroundColor: 'skyblue'
+                    }}
+                    onPress={()=> navigation.navigate('User Profile')}>
+                    <Text style={styles.text}> My Profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    style={{
+                        margin: 10,
+                        width: '100%',
+                        padding: 15,
+                        borderRadius: 10,
+                        alignItems: 'center',
                         backgroundColor: 'blue'
                     }}
                     onPress={()=> navigation.navigate('Commute Information')}>

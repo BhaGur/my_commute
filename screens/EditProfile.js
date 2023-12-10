@@ -1,18 +1,12 @@
-import { useEffect, useState } from 'react';
-import {
-    StyleSheet,
-    View,
-    Text,
-    TouchableOpacity,
-    Image,
-    TextInput
-  } from "react-native";import { db, auth } from '../firebase';
-import { onValue, push, ref, set } from 'firebase/database';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Image, TextInput } from 'react-native';
+import { db, auth } from '../firebase';
+import { onValue, ref, update } from 'firebase/database';
 import Logo2 from '../assets/commute_2.jpg';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 
-export default function ProfilePage() {
+export default function EditProfile({ route }) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phone, setPhone] = useState('');
@@ -24,27 +18,36 @@ export default function ProfilePage() {
     const navigation = useNavigation();
 
     useEffect(() => {
-        onValue(ref(db, auth.currentUser.uid + '/profile'),(snapshot) => {
-            const data = snapshot.val();
-            const items = [];
-            for (let id in data) {
-                items.push({id, ...data[id]});
-            }
-            setUserProfile(items);
-        });
-    }, []);
+        // Ensure userProfile is passed as a route parameter
+        const { item } = route.params;
+        setUserProfile(item);
 
-    const saveProfile = () => {
-        const firstRef = push(ref(db, auth.currentUser.uid + '/profile'));
-        set(firstRef, {
+        // Pre-fill form fields with the user profile data
+        setFirstName(item.firstName);
+        setLastName(item.lastName);
+        setPhone(item.phone);
+        setBirthDate(item.birthDate);
+        setAddress(item.address);
+        setCountry(item.country);
+    }, [route.params]);
+
+    const editProfile = (id) => {
+        const profileRef = ref(db, `${auth.currentUser.uid}/profile/${userProfile.id}`);
+        update(profileRef, {
             firstName,
             lastName,
             phone,
             birthDate,
-            address, 
+            address,
             country,
+        })
+        .then(() => {
+            alert('User profile updated successfully');
+        })
+        .catch((error) => {
+            console.error('Error updating user profile: ', error);
+            alert('Failed to update user profile');
         });
-        alert('User profile added successfully')
     }
 
     return (
@@ -53,7 +56,7 @@ export default function ProfilePage() {
                 <Image style={styles.image} source={Logo2} />
             </View>
             <Text style={styles.heading}>Hello!</Text>
-            <Text>Let's add your user profile!</Text>
+            <Text>Let's update your user profile!</Text>
 
             <StatusBar style="auto" />
             <View style ={styles.inputContainer}>
@@ -102,18 +105,18 @@ export default function ProfilePage() {
                 />
             </View>
             <View style={styles.buttonView}>
-                <TouchableOpacity
-                    style={{
-                        width: '25%',
-                        padding: 10,
-                        borderRadius: 10,
-                        alignItems: 'center',
-                        margin: 10,
-                        backgroundColor: 'green'}}
-                        onPress={saveProfile}
-                >
-                    <Text style={styles.buttonText}>Save</Text>
-                </TouchableOpacity>
+            <TouchableOpacity
+                style={{
+                    width: '25%',
+                    padding: 10,
+                    borderRadius: 10,
+                    alignItems: 'center',
+                    margin: 10,
+                    backgroundColor: 'green'}}
+                    onPress={() => editProfile(userProfile.id)}
+            >
+                <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
 
                 <TouchableOpacity
                     style={{
@@ -124,9 +127,9 @@ export default function ProfilePage() {
                         margin: 10,
                         backgroundColor: 'blue'
                     }}
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => navigation.navigate('User Profile')}
                 >
-                    <Text style={styles.buttonText}>Home</Text>
+                    <Text style={styles.buttonText}>Profile</Text>
                 </TouchableOpacity>    
             </View>
     

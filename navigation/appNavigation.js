@@ -5,6 +5,8 @@ import RegisterPage from '../screens/RegisterPage';
 import CommuteInfo from '../screens/CommuteInfo';
 import History from '../screens/History';
 import WeekSummary from '../screens/WeekSummary';
+import UserProfile  from '../screens/UserProfile';
+import EditProfile from '../screens/EditProfile';
 import useAuth from '../hooks/useAuth';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {NavigationContainer} from '@react-navigation/native';
@@ -20,6 +22,8 @@ export default function AppNavigation() {
           <Stack.Navigator>
             <Stack.Screen name="Profile" component={ProfilePage} options={{headerShown: false }} />
             <Stack.Screen name="Home" component={HomePage} options={{headerShown: false }} />
+            <Stack.Screen name="User Profile" component={UserProfile} options={{headerShown: false }} />
+            <Stack.Screen name="Edit Profile" component={EditProfile} options={{headerShown: false }} />
             <Stack.Screen name="Commute Information" component={CommuteInfo} options={{headerShown: false }} />
             <Stack.Screen name="History" component={History} options={{headerShown: false }} />
             <Stack.Screen name="Weekly Summary" component={WeekSummary} options={{headerShown: false }} />

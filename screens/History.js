@@ -26,7 +26,7 @@ const FecthData = () => {
         const cityWithoutCode = cityWithCode.replace(/\d+/g, '').trim();
       
         return { streetName, city: cityWithoutCode };
-      };
+    };
       
     const renderItem = ({ item }) => {
         const travelModeColor = getColor(item.travelMode);

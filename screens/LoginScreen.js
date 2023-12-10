@@ -15,6 +15,7 @@ const LoginScreen = () => {
         if(email && password) {
             try {
                 await signInWithEmailAndPassword(auth, email, password);
+                navigation.navigate('Home');
             } catch (error) {
                 alert('Sign in failed: ', error.message);
             } 

@@ -21,6 +21,7 @@ export default function RegisterPage() {
         if (email && password) {
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
+                navigation.navigate('Profile');
             }catch(err) {
                 console.log('got error: ', err.message);
             }
