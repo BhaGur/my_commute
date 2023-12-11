@@ -30,7 +30,6 @@ const INITIAL_POSITION = {
   longitudeDelta: LONGITUDE_DELTA,
 };
 
-// Define the InputAutocomplete component
 const InputAutocomplete = ({ label, placeholder, onPlaceSelected }) => {
   return (
     <View>
@@ -51,14 +50,12 @@ const InputAutocomplete = ({ label, placeholder, onPlaceSelected }) => {
   );
 };
 
-// Define the main App component
 const CommuteInfo = () => {
-  // State variables
   const [origin, setOrigin] = useState({ address: null, location: null});
   const [destination, setDestination] = useState({ address: null, location: null});
   const [showDirections, setShowDirections] = useState(false);
   const [distance, setDistance] = useState(0);
-  const [travelMode, setTravelMode] = useState("WALKING"); // Default to walking
+  const [travelMode, setTravelMode] = useState("WALKING"); 
   const mapRef = useRef(null);
 
   const [date, setDate] = useState(new Date());
@@ -88,7 +85,6 @@ const CommuteInfo = () => {
     day: 'numeric',
   };
 
-  // Function to animate the map camera to a specified position
   const moveTo = async (position) => {
     const camera = await mapRef.current?.getCamera();
     if (camera) {
@@ -97,7 +93,6 @@ const CommuteInfo = () => {
     }
   };
 
-  // Edge padding settings for fitting the coordinates on the map
   const edgePadding = {
     top: 400,
     right: 70,
@@ -105,14 +100,12 @@ const CommuteInfo = () => {
     left: 70,
   };
 
-  // Callback function for when the route is ready
   const traceRouteOnReady = (args) => {
     if (args) {
       setDistance(args.distance);
     }
   };
 
-  // Function to initiate route tracing
   const traceRoute = () => {
     if (origin && destination) {
       setShowDirections(true);
@@ -120,7 +113,6 @@ const CommuteInfo = () => {
     }
   };
 
-  // Callback function for when a place is selected
   const onPlaceSelected = (details, flag) => {
     const set = flag === "origin" ? setOrigin : setDestination;
     if (details) {
@@ -138,7 +130,6 @@ const CommuteInfo = () => {
     try {
       const commuteDataRef = ref(db, auth.currentUser.uid + '/journey');
 
-      // Add a new commute record under 'commuteData' with a unique key
       await push(commuteDataRef, {
         chosenDate: chosenDate.toISOString().split('T')[0],
         origin: origin.address,
@@ -150,11 +141,9 @@ const CommuteInfo = () => {
       alert('New commute added successfully');
     } catch (error) {
       console.error('Error saving data to Firebase:', error);
-      // Add code to handle errors, such as showing a user-friendly message
     }
   };
   
-  // Render the main view
   return (
     <View style={styles.container}>
       <MapView
@@ -230,7 +219,6 @@ const CommuteInfo = () => {
   );
 };
 
-// Styles for components
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -277,7 +265,7 @@ const styles = StyleSheet.create({
   },
   pickerItem: {
     fontSize: 16,
-    color: "#000", // Adjust color as needed
+    color: "#000", 
   },
   text:{
     marginTop:3,
@@ -285,5 +273,4 @@ const styles = StyleSheet.create({
   }
 });
 
-// Export the App component as the default export
 export default CommuteInfo;

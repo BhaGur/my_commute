@@ -18,11 +18,9 @@ export default function EditProfile({ route }) {
     const navigation = useNavigation();
 
     useEffect(() => {
-        // Ensure userProfile is passed as a route parameter
         const { item } = route.params;
         setUserProfile(item);
 
-        // Pre-fill form fields with the user profile data
         setFirstName(item.firstName);
         setLastName(item.lastName);
         setPhone(item.phone);
