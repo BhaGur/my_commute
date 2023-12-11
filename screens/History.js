@@ -66,14 +66,14 @@ const FecthData = () => {
     return(
         <View style={styles.container}>
             <Text style={styles.header}>Journey History</Text>
-            {journey && (
-                <FlatList
-                    data={journey}
-                    keyExtractor={item => item.id}
-                    renderItem={renderItem} 
-                />
+            {journey.length === 0 ? (
+                <View style={styles.centeredMessage}>
+                    <Text style={styles.noJourneyMessage}>No journeys yet!</Text>
+                </View>    
+            ) : (
+                <FlatList data={journey} keyExtractor={(item) => item.id} renderItem={renderItem} />
             )}
-        </View>
+                </View>
     )
 }
 const styles = StyleSheet.create({
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     header: {
       fontSize: 30,
       textAlign: 'center',
-      margin: 15,
+      margin: 20,
       fontWeight: 'bold'  
     },
     list: {
@@ -98,7 +98,17 @@ const styles = StyleSheet.create({
       shadowOffset: { width: 3, height: 3 },
       shadowOpacity: 0.3,
       shadowRadius: 8
-    }
+    },
+    centeredMessage: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      noJourneyMessage: {
+        fontSize: 20,
+        textAlign: 'center',
+        color: 'red'
+      },
 });
 
 export default FecthData;

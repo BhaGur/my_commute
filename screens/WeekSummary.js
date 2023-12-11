@@ -7,6 +7,8 @@ export default function WeekSummary() {
   const [travelData, setTravelData] = useState([]);
   const [distanceSum, setDistanceSum] = useState({});
   const [buttonPressed, setButtonPressed] = useState(false); 
+  const [totalDistance, setTotalDistance] = useState(0);
+  const [mostUsedMode, setMostUsedMode] = useState("");
 
   useEffect(() => {
     const dataRef = ref(db, `${auth.currentUser.uid}/journey`);
@@ -27,38 +29,64 @@ export default function WeekSummary() {
   const calculateDistanceSum = () => {
     if (travelData.length > 0) {
       const sumByMode = {};
+      let maxDistance = 0;
 
       travelData.forEach((travel) => {
         const { distance, travelMode } = travel;
+
+        setTotalDistance((prevTotalDistance) => prevTotalDistance + distance);
 
         if (sumByMode[travelMode]) {
           sumByMode[travelMode] += distance;
         } else {
           sumByMode[travelMode] = distance;
         }
+
+        if (sumByMode[travelMode] > maxDistance) {
+          maxDistance = sumByMode[travelMode];
+          setMostUsedMode(travelMode);
+        }
       });
 
       setDistanceSum(sumByMode);
-      setButtonPressed(true); 
+      setButtonPressed(true);
     } else {
+      setButtonPressed(false);
       console.log("No travel data available.");
     }
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={calculateDistanceSum}>
-        <Text style={styles.text}>Distance Summary</Text>
-      </TouchableOpacity>
-      {buttonPressed && travelData && ( // Render only when buttonPressed is true
-        <View style={styles.result}>
-          <Text style={styles.resultTitle}>Total:</Text>
-          {Object.entries(distanceSum).map(([mode, sum]) => (
+    <TouchableOpacity style={styles.button} onPress={calculateDistanceSum}>
+      <Text style={styles.text}>Distance Summary</Text>
+    </TouchableOpacity>
+    {(buttonPressed || travelData.length === 0) && (
+      <View style={styles.result}>
+        <Text style={styles.resultTitle}>Total:</Text>
+        {travelData.length > 0 ? (
+          Object.entries(distanceSum).map(([mode, sum]) => (
             <Text key={mode}>{`${mode}: ${sum.toFixed(2)} Km`}</Text>
-          ))}
-        </View>
-      )}
-    </View>
+          ))
+        ) : (
+          <Text>No data available</Text>
+        )}
+
+        <Text style={styles.resultTitle}>Total Distance :</Text>
+        {travelData.length > 0 ? (
+          <Text>{`${totalDistance.toFixed(2)} Km`}</Text>
+        ) : (
+          <Text>No data available</Text>
+        )}
+        <Text style={styles.resultTitle}>Most Used Mode:</Text>
+        {travelData.length > 0 ? (
+          <Text>{mostUsedMode}</Text>
+        ) : (
+          <Text>No data available</Text>
+        )}
+      </View>
+    )}
+  </View>
   );
 }
 
@@ -83,12 +111,14 @@ const styles = StyleSheet.create({
   result: {
     marginTop: 10,
     alignContent: 'center',
+    alignItems: 'center'
   },
   resultTitle: {
     alignSelf: 'center',
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: '700',
-    marginBottom: 5,
+    marginTop: 10,
+    color: 'blue'
   },
   loadingText: {
     marginTop: 10,
