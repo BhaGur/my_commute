@@ -15,7 +15,7 @@ function getDate() {
     const hours = today.getHours();
     const min = today.getMinutes();
     const sec = today.getSeconds();
-    return `${month}/${date}/${year} ${hours}:${min}:${sec}`;
+    return `${date}/${month}/${year} ${hours}:${min}`;
 }
 
 export default function HomePage() {
